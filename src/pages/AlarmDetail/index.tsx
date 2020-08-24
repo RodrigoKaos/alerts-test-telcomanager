@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Button 
-} from 'react-native';
+import { View, Text, StyleSheet, Button } from 'react-native';
 
 import {Props} from '../../routes/AppStack';
 import { IAlarm } from '../../components/AlarmItem';
@@ -10,7 +9,6 @@ const AlarmDetail: React.FC<Props> = ({ route, navigation } :Props) => {
   const alarm :IAlarm = route.params.alarm;
   
   const handleGoBack = () => navigation.goBack();
-  
   
   return (
     <>

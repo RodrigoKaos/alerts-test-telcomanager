@@ -38,7 +38,6 @@ function AlarmList () {
       }
     </ScrollView>
     </View>
-    
   );
 }
 

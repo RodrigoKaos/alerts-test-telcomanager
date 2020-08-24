@@ -4,9 +4,6 @@ import { LineChart } from 'react-native-chart-kit';
 
 import { getDateLabels } from '../../util/getDateLabels';
 
-interface IIOChartProps {
-  data: any;
-}
 const IOChart: React.FC = () => {
 
   const generateDataSet = () => {
