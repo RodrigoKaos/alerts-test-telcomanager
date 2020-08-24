@@ -13,7 +13,7 @@ const TimerDisplay: React.FC<ITimerDisplayProps> = ({label, time, date}) => {
   const opacity = (date === '00/00/00') ? 0 : 1;
   return (
     <View style={styles.container} >
-      <Text style={styles.timeLabel}>{label}</Text>
+      <Text style={[styles.timeLabel, {opacity}]}>{label}</Text>
       <Text style={[styles.timeHour, {opacity}]}>{time}</Text>
       <Text style={[styles.timeDate, {opacity}]}>{date}</Text>
     </View>
