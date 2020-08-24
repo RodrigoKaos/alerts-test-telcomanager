@@ -7,7 +7,7 @@ import AlarmDetail from '../pages/AlarmDetail';
 import { IAlarm } from '../components/AlarmItem';
 
 type AlarmsParamList = {
-  Home: undefined;
+  Alarms: undefined;
   AlarmDetail :{ alarm: IAlarm };
 };
 
