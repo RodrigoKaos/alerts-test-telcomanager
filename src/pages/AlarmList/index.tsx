@@ -26,6 +26,7 @@ function AlarmList () {
   
   return (
     <View>
+      {!(alarmsArr.length > 0) && (<Text>Nenhum alarme encontrado</Text>)}
       <ScrollView >
       {
         alarmsArr.map((alarm :IAlarm ) => (
