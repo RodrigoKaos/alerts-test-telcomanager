@@ -18,7 +18,7 @@ function AlarmList () {
       setAlarmsArr( alarmList );
 
     } catch (error) {
-      console.log('Opss... Algo de errado não deu certo, na minha maquina funciona');
+      console.log('Erro:', error);
     }
   }
   
