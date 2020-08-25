@@ -2,11 +2,12 @@ import { fixTime } from '../getFormatedDate';
 
 export function getDateLabels() {//.toLocaleString('pt-BR')
   const oneDayInMilliseconds = 1000 * 60 * 60 * 24;
+  const oneHourInMilliseconds = 1000 * 60 * 60 * 1;
   let fiveMinutesInMilliseconds = 1000 * 60 * 5;
   let thirtyMinutesInMilliseconds = 1000 * 60 * 30;
   
   const now = new Date();
-  const yesterday = new Date(Date.now() - oneDayInMilliseconds);
+  const yesterday = new Date(Date.now() - oneHourInMilliseconds);
 
   let start = yesterday.getTime();
   let end = now.getTime();

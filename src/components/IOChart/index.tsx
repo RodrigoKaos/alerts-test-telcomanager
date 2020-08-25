@@ -8,7 +8,7 @@ const IOChart: React.FC = () => {
 
   const generateDataSet = () => {
     let dataSetArr = [];
-    for(let i = 0; i < 288; i++) {
+    for(let i = 0; i < 12; i++) {
       let aux =  10;//i > 144? i * 0.5 : i;
       dataSetArr.push( (Math.random() * aux) );
     }
@@ -61,7 +61,7 @@ const IOChart: React.FC = () => {
       <LineChart
         style={{ paddingBottom: 65}}
         data={dataChart}
-        width={ Dimensions.get('window').width * 24}
+        width={ Dimensions.get('window').width * 1}
         height={220}
         yAxisInterval={1}
         fromZero={true}
