@@ -1,100 +1,109 @@
-import React, { useEffect } from 'react';
+import React, { Component } from 'react';
 import { View, Text, StyleSheet, ScrollView, Dimensions, Button } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 
 import { getDateLabels } from '../../util/getDateLabels';
+import generateDataSet from '../../util/generateDataSet';
 
-const IOChart: React.FC = () => {
-
-  const generateDataSet = () => {
-    let dataSetArr = [];
-    for(let i = 0; i < 12; i++) {
-      let aux =  10;//i > 144? i * 0.5 : i;
-      dataSetArr.push( (Math.random() * aux) );
-    }
-    return dataSetArr;
+export default class IOChart extends Component {
+  
+  state = {
+    isLoaded: false
   }
 
-  const data1 = generateDataSet();
-  const data2 = generateDataSet();
-  const dateLabels = getDateLabels();
+  componentDidMount(){
+    setTimeout(()=> {
+      this.setState({isLoaded: true });
+    }, 1000)
+  }  
 
-  const chartConfig = {
-    backgroundGradientFrom: "#1E2923",
-    alignItems: 'right',
-    backgroundGradientFromOpacity: 0,
-    backgroundGradientTo: "#1E2923",
-    backgroundGradientToOpacity: 0.0,
-    color: (opacity = 1) => `rgba(0, 0, 146, ${opacity})`,
-    strokeWidth: 1, // optional, default 3
-    barPercentage: 1,
-    decimalPlaces: 0,
-    useShadowColorFromDataset: false, // optional
-    propsForDots: {
-      r: "0",
-      strokeWidth: "2",
-      stroke: "#ffa726"
-    }
-  };
+  render() {
+    const hoursToRender = 3;
 
-  const dataChart = {
-    labels: dateLabels,
-    datasets: [
-      {
-        data: data1,
-        color: (opacity = 1) => `rgba(0, 0, 255, ${opacity})`, // optional
-        strokeWidth: 3 // optional
-      },
-      {
-        data: data2,
-        color: (opacity = 1) => `rgba(0, 128, 0, ${opacity})`, // optional
-        strokeWidth: 3 // optional
+    const dots = ( (288 / 24) * hoursToRender);
+    const oneHourInMilliseconds = 1000 * 60 * 60 * 1;
+    const chartWidth = Dimensions.get('window').width * hoursToRender;
+
+    const data1 = generateDataSet(dots, 10);
+    const data2 = generateDataSet(dots, 10);
+    const dateLabels = getDateLabels( hoursToRender * oneHourInMilliseconds);
+
+    const chartConfig = {
+      backgroundGradientFrom: "#1E2923",
+      alignItems: 'right',
+      backgroundGradientFromOpacity: 0,
+      backgroundGradientTo: "#1E2923",
+      backgroundGradientToOpacity: 0.0,
+      color: (opacity = 1) => `rgba(0, 0, 146, ${opacity})`,
+      strokeWidth: 1, // optional, default 3
+      barPercentage: 1,
+      decimalPlaces: 0,
+      useShadowColorFromDataset: false, // optional
+      propsForDots: {
+        r: "0",
+        strokeWidth: "2",
+        stroke: "#ffa726"
       }
-    ],
-    //legend: ['Entrada', 'Saída'] // optional
-  };
+    };
+  
+    const dataChart = {
+      labels: dateLabels,
+      datasets: [
+        {
+          data: data1,
+          color: (opacity = 1) => `rgba(0, 0, 255, ${opacity})`, // optional
+          strokeWidth: 3 // optional
+        },
+        {
+          data: data2,
+          color: (opacity = 1) => `rgba(0, 128, 0, ${opacity})`, // optional
+          strokeWidth: 3 // optional
+        }
+      ],
+      //legend: ['Entrada', 'Saída'] // optional
+    };
+  
+    const handleDesalarmar = () => alert('TODO...');
+    
+    const styles = StyleSheet.create({
+      squareLabels: {
+        width: 15,
+        height: 15,
+      },
+    });
 
-  const handleDesalarmar = () => alert('TODO...');
-
-  return <>
-    <ScrollView horizontal={true} style={{overflow: 'scroll', maxHeight: 270, marginLeft: -35}}>
-      <LineChart
-        style={{ paddingBottom: 65}}
-        data={dataChart}
-        width={ Dimensions.get('window').width * 1}
-        height={220}
-        yAxisInterval={1}
-        fromZero={true}
-        verticalLabelRotation={45}
-        chartConfig={chartConfig}
-      />
-    </ScrollView>
-    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-      <View>
-        <View style={{flexDirection: 'row'}}>
-          <View style={[styles.squareLabels, { backgroundColor: 'rgba(0, 0, 255, 1)'} ]}></View>
-          <Text> Entrada</Text>
-        </View>
-        <View style={{flexDirection: 'row'}}>
-          <View style={[styles.squareLabels, { backgroundColor: 'rgba(0, 128, 0, 1)'} ]}></View>
-          <Text> Saída</Text>
-        </View>
-      </View>
-      <View style={{backgroundColor:'#ccc'}} >
-        <Button
-          onPress={handleDesalarmar}
-          title="Desalarmar"
-        />
-      </View>
-    </View>
-  </>;
+    return <>
+        {!this.state.isLoaded && <Text>Carregando... {this.state.isLoaded}</Text>}
+        {this.state.isLoaded && <><ScrollView horizontal={true} style={{overflow: 'scroll', maxHeight: 270, marginLeft: -35}}>
+          <LineChart
+            style={{ paddingBottom: 65}}
+            data={dataChart}
+            width={ chartWidth}
+            height={220}
+            yAxisInterval={1}
+            fromZero={true}
+            verticalLabelRotation={45}
+            chartConfig={chartConfig}
+          />
+        </ScrollView>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View>
+            <View style={{flexDirection: 'row'}}>
+              <View style={[styles.squareLabels, { backgroundColor: 'rgba(0, 0, 255, 1)'} ]}></View>
+              <Text> Entrada</Text>
+            </View>
+            <View style={{flexDirection: 'row'}}>
+              <View style={[styles.squareLabels, { backgroundColor: 'rgba(0, 128, 0, 1)'} ]}></View>
+              <Text> Saída</Text>
+            </View>
+          </View>
+          <View style={{backgroundColor:'#ccc'}} >
+            <Button
+              onPress={handleDesalarmar}
+              title="Desalarmar"
+            />
+          </View>
+        </View></>}
+      </>
+  }
 }
-
-const styles = StyleSheet.create({
-  squareLabels: {
-    width: 15,
-    height: 15,
-  },
-});
-
-export default IOChart;
