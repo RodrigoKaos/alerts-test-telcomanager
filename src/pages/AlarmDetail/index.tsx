@@ -6,22 +6,22 @@ import { IAlarm } from '../../components/AlarmItem';
 import IOChart from '../../components/IOChart';
 
 const AlarmDetail: React.FC<Props> = ({ route, navigation } :Props) => {
-  const alarm :IAlarm = route.params.alarm;  
+  const alarm :IAlarm = route.params.alarm;
   
   const handleGoBack = () => navigation.goBack();
   
   return <>
-      <View style={ styles.header }>
-        <Button title="Voltar" onPress={handleGoBack} />
-        <View style={styles.titleContainer}>
-          <Text style={ styles.title }>{alarm.alarm_name}</Text>
-        </View>
+    <View style={ styles.header }>
+      <Button title="Voltar" onPress={handleGoBack} />
+      <View style={styles.titleContainer}>
+        <Text style={ styles.title }>{alarm.alarm_name}</Text>
       </View>
+    </View>
 
-      <View style={ styles.container }>
-          <IOChart />
-      </View>
-    </>;
+    <View style={ styles.container }>
+        <IOChart hoursToRender={2}/>
+    </View>
+  </>;
 }
 
 const styles = StyleSheet.create({

@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ScrollView, Dimensions, Button } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Dimensions, Button, ActivityIndicator } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 
 import { getDateLabels } from '../../util/getDateLabels';
 import generateDataSet from '../../util/generateDataSet';
 
-export default class IOChart extends Component {
+interface IIOChartProps {
+  hoursToRender :number;
+}
+
+export default class IOChart extends Component<IIOChartProps> {
   
   state = {
     isLoaded: false
@@ -18,14 +22,15 @@ export default class IOChart extends Component {
   }  
 
   render() {
-    const hoursToRender = 3;
+    const hoursToRender = this.props.hoursToRender;
 
     const dots = ( (288 / 24) * hoursToRender);
     const oneHourInMilliseconds = 1000 * 60 * 60 * 1;
     const chartWidth = Dimensions.get('window').width * hoursToRender;
 
-    const data1 = generateDataSet(dots, 10);
-    const data2 = generateDataSet(dots, 10);
+    const transferLimit = 10;
+    const data = generateDataSet(dots, transferLimit);
+    // const data2 = generateDataSet(dots, 10);
     const dateLabels = getDateLabels( hoursToRender * oneHourInMilliseconds);
 
     const chartConfig = {
@@ -50,12 +55,12 @@ export default class IOChart extends Component {
       labels: dateLabels,
       datasets: [
         {
-          data: data1,
+          data: data.input,
           color: (opacity = 1) => `rgba(0, 0, 255, ${opacity})`, // optional
           strokeWidth: 3 // optional
         },
         {
-          data: data2,
+          data: data.output,
           color: (opacity = 1) => `rgba(0, 128, 0, ${opacity})`, // optional
           strokeWidth: 3 // optional
         }
@@ -73,8 +78,9 @@ export default class IOChart extends Component {
     });
 
     return <>
-        {!this.state.isLoaded && <Text>Carregando... {this.state.isLoaded}</Text>}
-        {this.state.isLoaded && <><ScrollView horizontal={true} style={{overflow: 'scroll', maxHeight: 270, marginLeft: -35}}>
+      { !this.state.isLoaded && <ActivityIndicator />
+        || <>
+        <ScrollView horizontal={true} style={{overflow: 'scroll', maxHeight: 270, marginLeft: -35}}>
           <LineChart
             style={{ paddingBottom: 65}}
             data={dataChart}
@@ -103,7 +109,9 @@ export default class IOChart extends Component {
               title="Desalarmar"
             />
           </View>
-        </View></>}
-      </>
+        </View>
+        </>
+      }
+    </>
   }
 }
