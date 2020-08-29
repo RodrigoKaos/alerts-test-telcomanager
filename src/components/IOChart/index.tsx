@@ -7,6 +7,7 @@ import generateDataSet from '../../util/generateDataSet';
 
 interface IIOChartProps {
   hoursToRender :number;
+  timeInterval :number;
 }
 
 export default class IOChart extends Component<IIOChartProps> {
@@ -22,16 +23,24 @@ export default class IOChart extends Component<IIOChartProps> {
   }  
 
   render() {
-    const hoursToRender = this.props.hoursToRender;
-
-    const dots = ( (288 / 24) * hoursToRender);
-    const oneHourInMilliseconds = 1000 * 60 * 60 * 1;
-    const chartWidth = Dimensions.get('window').width * hoursToRender;
-
+    const { hoursToRender, timeInterval } = this.props;
+    
     const transferLimit = 10;
+    const oneHourInMilliseconds = 1000 * 60 * 60 * 1;
+    const dotsLimitPerHour = 12;
+    const defaultWidth = 0.9;
+
+    const timePeriod = hoursToRender * oneHourInMilliseconds;
+    const dots = timePeriod / timeInterval;
+    const additionalWidth = dots / dotsLimitPerHour;
+    
+    // const aux = dot
+
+    const chartWidth = Dimensions.get('window').width * additionalWidth;// * 0.9//hoursToRender;
+    console.log(dots, hoursToRender, dots/ dotsLimitPerHour);
+    
     const data = generateDataSet(dots, transferLimit);
-    // const data2 = generateDataSet(dots, 10);
-    const dateLabels = getDateLabels( hoursToRender * oneHourInMilliseconds);
+    const dateLabels = getDateLabels( timePeriod, timeInterval);
 
     const chartConfig = {
       backgroundGradientFrom: "#1E2923",
@@ -41,7 +50,7 @@ export default class IOChart extends Component<IIOChartProps> {
       backgroundGradientToOpacity: 0.0,
       color: (opacity = 1) => `rgba(0, 0, 146, ${opacity})`,
       strokeWidth: 1, // optional, default 3
-      barPercentage: 1,
+      // barPercentage: 10,
       decimalPlaces: 0,
       useShadowColorFromDataset: false, // optional
       propsForDots: {
@@ -80,7 +89,7 @@ export default class IOChart extends Component<IIOChartProps> {
     return <>
       { !this.state.isLoaded && <ActivityIndicator />
         || <>
-        <ScrollView horizontal={true} style={{overflow: 'scroll', maxHeight: 270, marginLeft: -35}}>
+        <ScrollView horizontal={true} style={{overflow: 'scroll', maxHeight: 270, marginLeft: -35,}}>
           <LineChart
             style={{ paddingBottom: 65}}
             data={dataChart}

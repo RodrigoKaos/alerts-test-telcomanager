@@ -9,7 +9,11 @@ const AlarmDetail: React.FC<Props> = ({ route, navigation } :Props) => {
   const alarm :IAlarm = route.params.alarm;
   
   const handleGoBack = () => navigation.goBack();
-  
+
+  const hoursToRender = 24;
+  const oneMinuteInMilliseconds = 1000 * 60 * 1;
+  const fiveMinutesInMilliseconds = oneMinuteInMilliseconds * 20;
+
   return <>
     <View style={ styles.header }>
       <Button title="Voltar" onPress={handleGoBack} />
@@ -19,7 +23,7 @@ const AlarmDetail: React.FC<Props> = ({ route, navigation } :Props) => {
     </View>
 
     <View style={ styles.container }>
-        <IOChart hoursToRender={2}/>
+        <IOChart hoursToRender={hoursToRender} timeInterval={fiveMinutesInMilliseconds}/>
     </View>
   </>;
 }

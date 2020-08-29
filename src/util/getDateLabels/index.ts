@@ -1,7 +1,6 @@
 import { fixTime } from '../getFormatedDate';
 
-export function getDateLabels(timeinMilliseconds: number) {
-  let fiveMinutesInMilliseconds = 1000 * 60 * 5;
+export function getDateLabels(timeinMilliseconds: number, intervalTimeInMilliseconds: number) {
 
   const now = new Date();
   const yesterday = new Date(Date.now() - timeinMilliseconds);
@@ -10,12 +9,12 @@ export function getDateLabels(timeinMilliseconds: number) {
   let end = now.getTime();
   let labelsArr :any = [];
 
-  for(let loop = start; loop < end; loop += fiveMinutesInMilliseconds){
+  for(let loop = start; loop <= end; loop += intervalTimeInMilliseconds){
     let loopDate = new Date(loop);
     let hours = fixTime(loopDate.getHours());
     let minutes = fixTime(loopDate.getMinutes());
     let formatedTime = `${hours}:${minutes}`;
-    if(loop == start || (loop + fiveMinutesInMilliseconds) >= end) {
+    if(loop == start || (loop + intervalTimeInMilliseconds) > end) {
       let day = fixTime(loopDate.getDate());
       let month = fixTime(loopDate.getMonth()+1);
       let year = loopDate.getFullYear().toString().slice(-2);
